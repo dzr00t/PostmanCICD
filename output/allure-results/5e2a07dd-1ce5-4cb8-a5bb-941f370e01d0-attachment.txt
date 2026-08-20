@@ -1,5 +1,0 @@
-{
-  "even_id": 784,
-  "titre": "solid statefeed",
-  "contenu": "Wed Nov 12 2025 16:58:10 GMT+0100 (heure normale d’Europe centrale)"
-}

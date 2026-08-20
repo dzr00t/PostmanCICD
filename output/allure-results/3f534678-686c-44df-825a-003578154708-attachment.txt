@@ -1,7 +1,0 @@
-{
-  "nomComplet": "Barry Gislason",
-  "email": "Darryl.McDermott49@yahoo.com",
-  "password": "sfRACPygkF_jn7H",
-  "telephone": "335-432-6009",
-  "fcm_token": "fcm_{{$randomPhoneNumber"
-}

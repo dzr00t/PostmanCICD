@@ -1,7 +1,0 @@
-{
-  "nomComplet": "Leroy Toy",
-  "email": "Robin0@yahoo.com",
-  "password": "S3jGRiynrHwnuwn",
-  "telephone": "985-446-8990",
-  "fcm_token": "fcm_{{$randomPhoneNumber"
-}

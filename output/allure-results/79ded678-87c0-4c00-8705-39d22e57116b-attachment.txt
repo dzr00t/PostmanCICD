@@ -1,4 +1,0 @@
-{
-  "contenu": "onlineapplication",
-  "parent_id": null
-}
