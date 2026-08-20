@@ -9,8 +9,13 @@ pipeline {
                 }
             }
             stages {
-
-
+                    
+                    stage('install deps') {
+                    steps {
+                        // installation 
+                        sh 'npm install -g newman-reporter-allure'
+                    }
+                }
                 stage('clean allure results') {
                     steps {
                         // nettoyage du dossier allure-results
@@ -39,7 +44,7 @@ pipeline {
     post {
         always {
             script {
-                // publication automatique du rapport allure
+                
                 unstash 'allure-results'
                 archiveArtifacts 'output/allure-results/*'
                 allure includeProperties: false,
