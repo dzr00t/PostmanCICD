@@ -44,12 +44,27 @@ pipeline {
     }
 
 
-    post {
+post {
         always {
-            archiveArtifacts artifacts: 'allure-results/*', allowEmptyArchive: true
-            allure includeProperties: false,
-                   jdk: '',
-                   results: [[path: 'allure-results/']]
+            node('built-in') {
+                script {
+                    try {
+                        // nettoyage préalable des anciens résultats extraits
+                        sh 'rm -rf output/allure-results allure-report'
+                        
+                        unstash 'allure-results'
+                        archiveArtifacts 'output/allure-results/*'
+                        
+                        // force la génération d un nouveau rapport propre sans fusion d historique
+                        allure includeProperties: false,
+                               jdk: '',
+                               reportBuildPolicy: 'ALWAYS',
+                               results: [[path: 'output/allure-results/']]
+                    } catch (Exception e) {
+                        echo "aucun resultat allure a publier."
+                    }
+                }
+            }
         }
     }
 }
