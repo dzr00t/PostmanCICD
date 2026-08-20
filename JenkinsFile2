@@ -2,7 +2,7 @@ pipeline {
     agent any
     parameters {
         booleanParam(name: 'isenvironment', defaultValue: false, description: 'executer avec ou sans fichier d environnement')
-        choice(name: 'environment', choices: ['dev.json', 'staging.json', 'preprod.json'], description: 'choisissez le fichier d environnement')   
+        choice(name: 'environment', choices: ['dev.json', 'staging.json', 'environment.json'], description: 'choisissez le fichier d environnement')   
     }
     stages {
         stage('global stage') {
