@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    parameters {
-        booleanParam(name: 'isenvironment', defaultValue: false, description: 'executer avec ou sans fichier d environnement')
-        choice(name: 'environment', choices: ['dev.json', 'staging.json', 'environment.json'], description: 'choisissez le fichier d environnement')   
-    }
     stages {
         stage('global stage') {
             agent {
@@ -15,14 +11,13 @@ pipeline {
             stages {
                 stage('install deps') {
                     steps {
-                        
-                        sh 'npm i'
+                        sh 'npm install'
                     }
                 }
 
                 stage('clean allure results') {
                     steps {
-                        
+                        // nettoyage du dossier allure-results
                         sh '''
                             echo "suppression du cache allure..."
                             rm -rf output/allure-results
@@ -35,16 +30,8 @@ pipeline {
                 stage('run user test') {
                     steps {   
                         script {
-                            
-                            def cmd = "npx newman run Postman_CICD.json"
-                            
-                            if (params.isenvironment) {
-                                cmd += " -e ${params.environment}"
-                            }
-                            
-                            cmd += " --reporters cli,allure --reporter-allure-resultsDir output/allure-results"
-
-                            sh cmd
+                            // execution newman avec environnement et allure
+                            sh 'npx newman run Postman_CICD.json -e environment.json --reporters cli,allure --reporter-allure-resultsDir output/allure-results'
 
                             stash name: 'allure-results', includes: 'output/allure-results/*'
                         }
