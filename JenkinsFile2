@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+    parameters {
+        booleanParam(name: 'isenvironment', defaultValue: false, description: 'executer avec ou sans fichier d environnement')
+        choice(name: 'environment', choices: ['dev.json', 'staging.json', 'preprod.json'], description: 'choisissez le fichier d environnement')   
+    }
+    stages {
+        stage('global stage') {
+            agent {
+                docker {
+                    image 'postman/newman:latest'
+                    args '-u root --entrypoint='
+                }
+            }
+            stages {
+                stage('install deps') {
+                    steps {
+                        
+                        sh 'npm ci'
+                    }
+                }
+
+                stage('clean allure results') {
+                    steps {
+                        
+                        sh '''
+                            echo "suppression du cache allure..."
+                            rm -rf output/allure-results
+                            mkdir -p output/allure-results
+                            echo "dossier nettoye avec succes"
+                        '''
+                    }
+                }
+        
+                stage('run user test') {
+                    steps {   
+                        script {
+                            
+                            def cmd = "npx newman run Postman_CICD.json"
+                            
+                            if (params.isenvironment) {
+                                cmd += " -e ${params.environment}"
+                            }
+                            
+                            cmd += " --reporters cli,allure --reporter-allure-resultsDir output/allure-results"
+
+                            sh cmd
+
+                            stash name: 'allure-results', includes: 'output/allure-results/*'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // publication automatique du rapport allure
+                unstash 'allure-results'
+                archiveArtifacts 'output/allure-results/*'
+                allure includeProperties: false,
+                       jdk: '',
+                       results: [[path: 'output/allure-results/']]
+            }
+        }
+    }
+}

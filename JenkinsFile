@@ -11,10 +11,11 @@ pipeline {
             stage('lancement de test') {
             steps {
 
-                sh 'newman run Postman_CICD.json -e environment.json' 
+                {sh 'newman run Postman_CICD.json -e environment.json'} 
 
                     
             }
+
         }
     }
 }
