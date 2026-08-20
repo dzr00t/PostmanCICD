@@ -12,7 +12,7 @@ pipeline {
                     
                     stage('install deps') {
                     steps {
-                        // installation 
+                        
                         sh 'npm install -g newman-reporter-allure'
                     }
                 }
@@ -32,7 +32,7 @@ pipeline {
                     steps {   
                         script {
                             // execution newman avec environnement et allure
-                            sh 'npx newman run Postman_CICD.json -e environment.json --reporters cli,allure --reporter-allure-resultsDir output/allure-results'
+                            sh 'newman run Postman_CICD.json -e environment.json --reporters cli,allure --reporter-allure-resultsDir output/allure-results'
 
                             stash name: 'allure-results', includes: 'output/allure-results/*'
                         }
