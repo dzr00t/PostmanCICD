@@ -21,8 +21,8 @@ pipeline {
                         // nettoyage du dossier allure-results
                         sh '''
                             echo "suppression du cache allure..."
-                            rm -rf output/allure-results
-                            mkdir -p output/allure-results
+                            rm -rf allure-results
+                            mkdir -p allure-results
                             echo "dossier nettoye avec succes"
                         '''
                     }
@@ -32,10 +32,10 @@ pipeline {
                     steps {   
                         script {
                             // execution newman avec environnement et allure
-                            sh 'npx newman run Postman_CICD.json -e environment.json --reporters cli,allure --reporter-allure-resultsDir output/allure-results'
+                            sh 'npx newman run Postman_CICD.json -e environment.json --reporters cli,allure --reporter-allure-resultsDir allure-results'
 
-                            stash name: 'allure-results', includes: 'output/allure-results/*'
-                        }
+                            stash name: 'allure-results', includes: 'allure-results/*'
+                        } 
                     }
                 }
             }
@@ -46,11 +46,11 @@ pipeline {
             script {
                 
                 unstash 'allure-results'
-                archiveArtifacts 'output/allure-results/*'
+                archiveArtifacts ' allure-results/*'
                 allure includeProperties: false,
                        jdk: '',
-                       results: [[path: 'output/allure-results/']]
+                       results: [[path: 'allure-results/']]
             }
         }
-    }
+    } 
 }
