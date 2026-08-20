@@ -1,0 +1,20 @@
+pipeline {
+    agent {
+        docker{
+            image 'postman/newman:latest'
+            args '-u root --entrypoint='
+        }
+    }
+
+
+    stages {
+            stage('lancement de test') {
+            steps {
+
+                sh 'newman run Postman_CICD.json -e environment.json' 
+
+                    
+            }
+        }
+    }
+}
